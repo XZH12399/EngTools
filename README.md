@@ -16,7 +16,6 @@ EngTools/
 │   └── kinematics_analysis/    # [工具 2] 运动学分析器
 │       └── (基于螺旋理论计算自由度、运动螺旋与瞬时运动)
 │
-├── data/                       # (可选) 共用的测试数据
 ├── .gitignore
 └── README.md                   # 您正在阅读的文件
 ```
