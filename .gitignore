@@ -1,0 +1,17 @@
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 系统文件
+.DS_Store
+
+# IDE 配置 (可选)
+.vscode/
+.idea/
+
+# 忽略输出文件 (防止仓库因 generated step 文件变得很大)
+**/output/*.step
+
+# 忽略虚拟环境
+venv/
+env/
