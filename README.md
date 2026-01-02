@@ -43,7 +43,7 @@ EngTools/
 
 ### 1. 克隆仓库
 ```bash
-git clone [https://github.com/YourUsername/EngTools.git](https://github.com/YourUsername/EngTools.git)
+git clone [https://github.com/XZH12399/EngTools.git](https://github.com/XZH12399/EngTools.git)
 cd EngTools
 ```
 
