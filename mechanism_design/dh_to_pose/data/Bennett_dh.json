@@ -12,5 +12,8 @@
       "3_4": {"a": 10.0, "alpha": 2.6180, "offset_source": 0.0, "offset_target": 0.0, "state_source": 0.5236, "state_target": 0.5651},
       "1_4": {"a": 17.32, "alpha": 2.0944, "offset_source": 0.0, "offset_target": 0.0, "state_source": 0.5236, "state_target": -0.5651}
     }
+  },
+  "settings": {
+    "root_node": "3"
   }
 }
