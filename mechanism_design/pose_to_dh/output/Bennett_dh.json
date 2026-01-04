@@ -1,0 +1,44 @@
+{
+  "data": {
+    "joints": {
+      "1": "R",
+      "2": "R",
+      "3": "R",
+      "4": "R"
+    },
+    "edges": {
+      "1_2": {
+        "a": 10.0,
+        "alpha": 2.618,
+        "offset_source": 0.0,
+        "state_source": -0.5236000000000001,
+        "offset_target": 0.0,
+        "state_target": 1.0057466953337633
+      },
+      "2_3": {
+        "a": 17.321405984380316,
+        "alpha": 2.094338678107392,
+        "offset_source": 0.0,
+        "state_source": -1.0057466953337633,
+        "offset_target": 0.0,
+        "state_target": 1.0472474304215647
+      },
+      "3_4": {
+        "a": 10.0,
+        "alpha": 2.618,
+        "offset_source": 0.0,
+        "state_source": -1.0472474304215647,
+        "offset_target": 0.0,
+        "state_target": 0.5651000000000002
+      },
+      "1_4": {
+        "a": 17.32,
+        "alpha": 2.0944,
+        "offset_source": 0.0,
+        "state_source": 0.5236000000000001,
+        "offset_target": 0.0,
+        "state_target": -0.5651000000000002
+      }
+    }
+  }
+}
