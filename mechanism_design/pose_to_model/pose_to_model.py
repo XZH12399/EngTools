@@ -162,7 +162,7 @@ def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
     # 【修改】默认使用同级目录 data/Bennett_pose.json 进行测试
-    default_input = os.path.join(base_dir, "data", "Bennett_pose.json")
+    default_input = os.path.join(base_dir, "data", "2PRU-1PRS.json")
 
     parser = argparse.ArgumentParser(description="[Module] Spatial Pose to 3D Model")
     parser.add_argument('-i', '--input', default=default_input, help="Input JSON")
