@@ -411,27 +411,63 @@ class PoseKinematicsRunner:
         return perturbed
 
     def _construct_smart_path(self, base_link_str, ee_link_str):
+        """
+        智能路径构建：支持 "杆件-杆件"、"杆件-节点"、"节点-节点" 的任意组合。
+        如果输入是杆件 "u_v"，会自动切断 u-v 边以确定延伸方向。
+        """
         G_full = nx.Graph()
         for u, v in self.topology: G_full.add_edge(u, v)
-        try:
-            b_u, b_v = base_link_str.split('_')
-            e_u, e_v = ee_link_str.split('_')
-        except:
-            return None, None, None
 
+        # --- 内部辅助函数：解析节点或杆件选项 ---
+        def parse_anchor_opts(anchor_str):
+            s = str(anchor_str)
+            if '_' in s:
+                # 如果是杆件 "A_B"
+                # 选项1: 从 A 出发 (Ghost是 B)
+                # 选项2: 从 B 出发 (Ghost是 A)
+                u, v = s.split('_')
+                # 返回: (选项列表, 需要切断的边)
+                return [
+                    {'node': u, 'ghost': v}, 
+                    {'node': v, 'ghost': u}
+                ], (u, v)
+            else:
+                # 如果是单节点 "A"
+                # 选项: 从 A 出发 (Ghost是 None，留给后续自动处理或留空)
+                return [{'node': s, 'ghost': None}], None
+
+        # 1. 解析基座和末端
+        base_opts, base_edge_to_cut = parse_anchor_opts(base_link_str)
+        ee_opts, ee_edge_to_cut = parse_anchor_opts(ee_link_str)
+
+        # 2. 构建切割图 (G_cut)
+        # 如果定义了杆件，必须切断杆件内部连接，强迫路径向外寻找
         G_cut = G_full.copy()
-        if G_cut.has_edge(b_u, b_v): G_cut.remove_edge(b_u, b_v)
-        if G_cut.has_edge(e_u, e_v): G_cut.remove_edge(e_u, e_v)
+        
+        if base_edge_to_cut and G_cut.has_edge(*base_edge_to_cut):
+            G_cut.remove_edge(*base_edge_to_cut)
+        
+        if ee_edge_to_cut and G_cut.has_edge(*ee_edge_to_cut):
+            G_cut.remove_edge(*ee_edge_to_cut)
 
-        base_opts = [{'head': b_u, 'start': b_v}, {'head': b_v, 'start': b_u}]
-        ee_opts = [{'end': e_u, 'tail': e_v}, {'end': e_v, 'tail': e_u}]
-
-        for b_opt, e_opt in itertools.product(base_opts, ee_opts):
-            try:
-                path = nx.shortest_path(G_cut, source=b_opt['start'], target=e_opt['end'])
-                return [b_opt['head']] + path + [e_opt['tail']], path[0], path[-1]
-            except:
-                continue
+        # 3. 组合寻找最短路径
+        # 使用 itertools.product 会更优雅，这里用双重循环直观展示
+        for b_opt in base_opts:
+            for e_opt in ee_opts:
+                try:
+                    # 在切断了内部连接的图中寻找路径
+                    path = nx.shortest_path(G_cut, source=b_opt['node'], target=e_opt['node'])
+                    
+                    # 路径构建成功！
+                    # 组装完整路径: [BaseGhost, Start, ..., End, EEGhost]
+                    # 注意：如果 Ghost 是 None，列表里就是 None，这是允许的
+                    full_path = [b_opt['ghost']] + path + [e_opt['ghost']]
+                    
+                    return full_path, path[0], path[-1]
+                except (nx.NetworkXNoPath, nx.NodeNotFound):
+                    continue
+        
+        # 如果所有组合都通不通
         return None, None, None
 
     def run_analysis(self, base_arg=None, ee_arg=None, method='drift'):
