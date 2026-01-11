@@ -74,6 +74,8 @@
     ]
   ],
   "settings": {
-    "root_node": "3"
+    "root_node": "3",
+    "base_link": "1_2",
+    "ee_link": "1_4"
   }
 }
